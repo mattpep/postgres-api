@@ -119,19 +119,28 @@ class ClusterManager(object):
 
     def create_user(self, database, host):
         with self.db(database).autocommit() as cursor:
+            print "DBG: generating username"
             username = generate_user(database, host)
+            print "DBG: generating password"
             password = generate_password(database, host)
+            print "DBG: generating group"
             group = generate_group(database)
+            print "DBG: user,password and group all generated"
 
             # Create the user and inherit privileges from the group role
             sql = "CREATE ROLE %s WITH LOGIN PASSWORD %%s IN ROLE %s"
+            print "about to execute: ", (sql % (username, group), (password, ))
             cursor.execute(sql % (username, group), (password, ))
+            print "SQL ran OK"
 
             # Alter default privileges will grant objects on group
             sql = ("ALTER DEFAULT PRIVILEGES FOR ROLE %s "
                    "GRANT ALL PRIVILEGES ON %s TO %s")
             for object in ['TABLES', 'SEQUENCES', 'FUNCTIONS']:
+                print "About to execute sql: ", (sql % (username, object, group))
                 cursor.execute(sql % (username, object, group))
+
+            print "All done!"
 
             return username, password
 
