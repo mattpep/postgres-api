@@ -78,6 +78,7 @@ def bind_app(name):
       - PG_DATABASE
       - PG_USER
       - PG_PASSWORD
+      - DATABASE_URL
 
     * 400: bad request, check your query
     * 404: database does not exist
@@ -105,6 +106,7 @@ def bind_app(name):
 
     username, password = instance.create_user(hostname)
     config = {
+        'DATABASE_URL': 'postgres://%s:%s@%s/%s' % ( username, password, instance.get_public_host(), instance.name),
         'PG_HOST': instance.get_public_host(),
         'PG_PORT': str(instance.get_port()),
         'PG_DATABASE': instance.name,
