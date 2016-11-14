@@ -133,11 +133,6 @@ class ClusterManager(object):
             cursor.execute(sql % (username, group), (password, ))
             print "SQL ran OK"
 
-            # Alter default privileges will grant objects on group
-            sql = "GRANT %s TO %s"
-            print "About to execute sql: ", (sql % (username, group))
-            cursor.execute(sql % (username, group))
-
             print "All done!"
 
             return username, password
