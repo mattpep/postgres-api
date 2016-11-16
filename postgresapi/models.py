@@ -128,10 +128,11 @@ class ClusterManager(object):
             cursor.execute(sql % (username, group), (password, ))
 
             # Alter default privileges will grant objects on group
-            sql = ("ALTER DEFAULT PRIVILEGES FOR ROLE %s "
-                   "GRANT ALL PRIVILEGES ON %s TO %s")
-            for object in ['TABLES', 'SEQUENCES', 'FUNCTIONS']:
-                cursor.execute(sql % (username, object, group))
+            for r in [ username, 'rds_superuser']:
+                sql = ("ALTER DEFAULT PRIVILEGES FOR ROLE %s "
+                       "GRANT ALL PRIVILEGES ON %s TO %s")
+                for object in ['TABLES', 'SEQUENCES', 'FUNCTIONS']:
+                    cursor.execute(sql % (r, object, group))
 
             return username, password
 
