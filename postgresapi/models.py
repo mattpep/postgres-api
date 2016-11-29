@@ -128,10 +128,10 @@ class ClusterManager(object):
             cursor.execute(sql % (username, group), (password, ))
 
             # set the user's default role to be that of the group
-            sql = [ "GRANT %s TO %s" % (group, config['SHARED_ADMIN']),
+            sql = [ "GRANT %s TO %s" % (group, app.config['SHARED_ADMIN']),
                     "GRANT %s TO %s" % (group, username),
                     "ALTER USER %s SET ROLE %s" % (username, group),
-                    "REVOKE %s FROM %s" % (group, config['SHARED_ADMIN'])
+                    "REVOKE %s FROM %s" % (group, app.config['SHARED_ADMIN'])
                   ]
             # Alter default privileges will grant objects on group
             for statement in sql:
